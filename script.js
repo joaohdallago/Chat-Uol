@@ -16,7 +16,8 @@ function login() {
     promise
         .then(() => {
             setInterval(keepConexion, 5000);
-            setInterval(getMessages, 3000)
+            getMessages();
+            setInterval(getMessages, 3000);
         })
 
         .catch(() => {
