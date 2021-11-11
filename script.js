@@ -82,6 +82,10 @@ sendMessageInput.addEventListener("keyup", function(event) {
   });
 
 function sendMessage() {
+    if (sendMessageInput.value === '') {
+        return
+    }
+
     const messageToSend = {
         from: user.name,
         to: "Todos",
@@ -97,4 +101,10 @@ function sendMessage() {
         .catch(errorCase)
 
     document.querySelector('footer input').value = '';
+}
+
+function openMenu() {
+    const menu = document.querySelector('aside');
+
+    menu.classList.add('open');
 }
