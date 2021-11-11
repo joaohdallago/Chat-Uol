@@ -2,8 +2,15 @@ let user;
 
 login();
 
+function errorCase() {
+    alert('Ocorreu um erro! Por favor, faça novamente o login');
+    window.location.reload();
+}
+
 function keepConexion() {
-    axios.post('https://mock-api.driven.com.br/api/v4/uol/status', user)
+    const promise = axios.post('https://mock-api.driven.com.br/api/v4/uol/status', user);
+
+    promise.catch(errorCase)
 }
 
 function login() {
@@ -15,6 +22,7 @@ function login() {
 
     promise
         .then(() => {
+            keepConexion();
             setInterval(keepConexion, 5000);
             getMessages();
             setInterval(getMessages, 3000);
@@ -65,24 +73,28 @@ function renderMessages(messages) {
     mainElement.lastElementChild.scrollIntoView();
 }
 
-/*
-<article class="status">
-            <time>(09:21:45)</time>  <strong>João</strong>  <span>entra na sala...</span>
-        </article>
+const sendMessageInput = document.querySelector('footer input')
 
-        <article class="message">
-            <time>(09:21:45)</time> <strong>João</strong> <span>para</span> <strong>Todos</strong>: <span>Bom dia</span>
-        </article>
+sendMessageInput.addEventListener("keyup", function(event) {
+    if (event.keyCode === 13) {
+      document.querySelector('footer ion-icon').click();
+    }
+  });
 
-        <article class="message">
-            <time>(09:21:45)</time> <strong>Maria</strong> <span>para</span> <strong>João</strong>: <span>Oi João :)</span>
-        </article>
+function sendMessage() {
+    const messageToSend = {
+        from: user.name,
+        to: "Todos",
+        text: sendMessageInput.value,
+        type: "message"
+    }
 
-        <article class="private_message">
-            <time>(09:21:45)</time> <strong>João</strong> <span>reservadamente para</span> <strong>Maria</strong>: <span>oi gatinha quer tc?</span>
-        </article>
+    const promise = axios.post('https://mock-api.driven.com.br/api/v4/uol/messages', messageToSend);
 
-        <article class="status">
-            <time>(09:21:45)</time>  <strong>Maria</strong>  <span>sai da sala...</span>
-        </article>
-*/
+    promise
+        .then(getMessages)
+
+        .catch(errorCase)
+
+    document.querySelector('footer input').value = '';
+}
