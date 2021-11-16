@@ -15,8 +15,6 @@ let messageToSend = {
     type: "message"
 }
 
-
-
 function errorCase() {
     alert('Ocorreu um erro! Por favor, faça novamente o login');
     window.location.reload();
@@ -39,7 +37,6 @@ function login() {
     user = {
         name: usernameInput.value
     }
-
 
     const promise = axios.post('https://mock-api.driven.com.br/api/v4/uol/participants', user);
 
@@ -101,8 +98,6 @@ function renderMessages(messages) {
 
     mainElement.lastElementChild.scrollIntoView();
 }
-
-
 
 function sendMessage() {
     if (sendMessageInput.value === '') {
@@ -168,6 +163,8 @@ function chooseParticipant(participant) {
     participant.classList.add('choosed');
 
     messageToSend.to = participant.lastElementChild.innerHTML;
+
+    renderSendingToSpan()
 }
 
 function chooseVisibility(visibilityOption) {
@@ -180,6 +177,16 @@ function chooseVisibility(visibilityOption) {
     visibilityOption.classList.add('choosed')
 
     messageToSend.type = visibilityOption.id;
+
+    renderSendingToSpan()
 }
 
-
+function renderSendingToSpan() {
+    const sendingToSpan = document.querySelector('.sending-to');
+    sendingToSpan.innerHTML = `Enviando para ${messageToSend.to} ${
+        (messageToSend.type === "private_message") ?
+        '(reservadamente)'
+        :
+        ''
+    }`
+}
