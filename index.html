@@ -13,15 +13,55 @@
 </head>
 
 <body>
+    <div class="login-screen">
+        <img src="/assets/logo.png" alt="logo chat uol">
+
+        <div>
+            <input type="text" placeholder="Digite seu nome" class="username">
+            <button onclick="login()">Entrar</button>
+        </div>
+    </div>
+
     <header>
         <img src="/assets/logo.png" alt="logo chat uol">
-        <ion-icon name="people" onclick="openMenu()"></ion-icon>
+        <ion-icon name="people" onclick="toggleMenu()"></ion-icon>
     </header>
 
     <main></main>
 
     <aside>
+        <div class="menu-background" onclick="toggleMenu()"></div>
+        <div class="container-menu">
+            <h2>Escolha um contato para enviar mensagem:</h2>
 
+            <ul>
+                <li class="participant choosed" onclick="chooseParticipant(this)">
+                    <ion-icon name="checkmark" class="check"></ion-icon>
+
+                    <ion-icon name="people"></ion-icon>
+                    <span>Todos</span>
+                </li>
+            </ul>
+
+            <ul class="participants"></ul>
+
+            <h2>Escolha a visibilidade:</h2>
+            <ul>
+                <li class="visibility-option choosed" id="message" onclick="chooseVisibility(this)">
+                    <ion-icon name="checkmark" class="check"></ion-icon>
+
+                    <ion-icon name="lock-open"></ion-icon>
+                    <span>Público</span>
+                </li>
+                <li class="visibility-option" id="private_message" onclick="chooseVisibility(this)">
+                    <ion-icon name="checkmark" class="check"></ion-icon>
+
+                    <ion-icon name="lock-closed"></ion-icon>
+                    <span>Reservadamente</span>
+                </li>
+            </ul>
+
+        </div>
     </aside>
 
     <footer>

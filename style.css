@@ -16,6 +16,61 @@ ion-icon {
     cursor: pointer;
 }
 
+.login-screen {
+    position: fixed;
+    z-index: 3;
+    top: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 97px;
+
+    padding-top: 72px;
+
+    background-color: #fff;
+}
+
+.login-screen div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.login-screen div input{
+    width: 261px;
+    height: 54px;
+
+    display: flex;
+    text-align: center;
+
+    border: 1px solid #D7D7D7;
+    border-radius: 4px;
+
+    background-color: #fff;
+}
+
+.login-screen div input::placeholder{
+    font-size: 18px;  
+}
+
+.login-screen div button {
+    width: 109px;
+    height: 45px;
+    
+    font-size: 18px;
+
+    border-radius: 9px;
+    cursor: pointer;
+
+    color: #696969;
+    background-color: #E7E7E7;
+}
+
 header, footer {
     position: fixed;
     
@@ -81,17 +136,81 @@ aside {
     position: fixed;
     z-index: 1;
     top: 0;
-    right: 0;
 
-    width: 0;
+    display: none;
+
+    width: 100vw;
     height: 100vh;
+
+}
+
+aside.open {
+    display: flex;
+}
+
+aside .menu-background {
+    width: 40%;
+    height: 100%;
+
+    opacity: 0.8;
+
+    background-color: #000;
+}
+
+aside .container-menu {
+    width: 60%;
+    height: 100%;
+
+    opacity: 1;
+
+    overflow-y: scroll;
 
     background-color: #fff;
 }
 
-aside.open {
-    width: 65vw;
+aside .container-menu h2 {
+    font-size: 16px;
+    line-height: 19px;
+
+    text-align: center;
+
+    margin: 30px 20px;
 }
+
+aside .container-menu ul li {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    margin: 0 0 7px 15px;
+}
+
+aside .container-menu ul li .check {
+    position: absolute;
+    right: 20px;
+
+    opacity: 0;
+
+    color: green;
+}
+
+aside .container-menu ul li.choosed .check {
+    position: absolute;
+    right: 20px;
+
+    opacity: 1;
+
+    color: green;
+}
+
+aside .container-menu ul li ion-icon {
+    font-size: 25px;
+}
+
+
+
 
 
 footer {
@@ -117,4 +236,8 @@ footer input::placeholder {
 
 footer ion-icon {
     font-size: 26px;
+}
+
+.display-none {
+    display: none;
 }

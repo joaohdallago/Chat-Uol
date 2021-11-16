@@ -1,6 +1,21 @@
 let user;
 
-login();
+const sendMessageInput = document.querySelector('footer input')
+
+sendMessageInput.addEventListener("keyup", function(event) {
+    if (event.keyCode === 13) {
+      document.querySelector('footer ion-icon').click();
+    }
+  });
+
+let messageToSend = {
+    from: "",
+    to: "Todos",
+    text: "",
+    type: "message"
+}
+
+
 
 function errorCase() {
     alert('Ocorreu um erro! Por favor, faça novamente o login');
@@ -14,9 +29,17 @@ function keepConexion() {
 }
 
 function login() {
+    const usernameInput = document.querySelector('.username');
+
+    const loginScreen = document.querySelector('.login-screen');
+    loginScreen.classList.add('display-none');
+
+    messageToSend.from = usernameInput.value;
+
     user = {
-        name: prompt('Qual seu nome?')
+        name: usernameInput.value
     }
+
 
     const promise = axios.post('https://mock-api.driven.com.br/api/v4/uol/participants', user);
 
@@ -24,8 +47,12 @@ function login() {
         .then(() => {
             keepConexion();
             setInterval(keepConexion, 5000);
+
             getMessages();
             setInterval(getMessages, 3000);
+
+            getParticipants()
+            setInterval(getParticipants, 10000);
         })
 
         .catch(() => {
@@ -43,6 +70,8 @@ function getMessages() {
 function renderMessages(messages) {
     const mainElement = document.querySelector('main');
 
+    mainElement.innerHTML = '';
+
     messages.data.forEach(message => {
         if (message.type === 'status') {
             mainElement.innerHTML += `
@@ -58,8 +87,8 @@ function renderMessages(messages) {
             `
         } else if (
             message.type === 'private_message' && (
-                message.from === user.from ||
-                message.from === user.to
+                message.from === user.name ||
+                message.to === user.name
             )
         ) {
             mainElement.innerHTML += `
@@ -73,25 +102,14 @@ function renderMessages(messages) {
     mainElement.lastElementChild.scrollIntoView();
 }
 
-const sendMessageInput = document.querySelector('footer input')
 
-sendMessageInput.addEventListener("keyup", function(event) {
-    if (event.keyCode === 13) {
-      document.querySelector('footer ion-icon').click();
-    }
-  });
 
 function sendMessage() {
     if (sendMessageInput.value === '') {
         return
     }
 
-    const messageToSend = {
-        from: user.name,
-        to: "Todos",
-        text: sendMessageInput.value,
-        type: "message"
-    }
+    messageToSend.text = sendMessageInput.value;
 
     const promise = axios.post('https://mock-api.driven.com.br/api/v4/uol/messages', messageToSend);
 
@@ -101,10 +119,67 @@ function sendMessage() {
         .catch(errorCase)
 
     document.querySelector('footer input').value = '';
-}
+};
 
-function openMenu() {
+function getParticipants() {
+    const promise = axios.get('https://mock-api.driven.com.br/api/v4/uol/participants');
+    const participantsUl = document.querySelector('.participants');
+
+    promise.then(
+        participants => {
+            participantsUl.innerHTML = '';
+
+            participants.data.forEach(
+                participant => {
+                    let isChoosed = '';
+
+                    if (participant.name === messageToSend.to) {
+                        isChoosed = 'choosed';
+                    }
+
+                    participantsUl.innerHTML += `
+                        <li class="participant ${isChoosed}" onclick="chooseParticipant(this)">
+                            <ion-icon name="checkmark" class="check"></ion-icon>
+
+                            <ion-icon name="person-circle"></ion-icon>
+                            <span>${participant.name}</span>
+                        </li>
+                    `
+                }
+            )
+        }
+    )
+};
+
+
+function toggleMenu() {
     const menu = document.querySelector('aside');
 
-    menu.classList.add('open');
+    menu.classList.toggle('open');
+};
+
+function chooseParticipant(participant) {
+    const lastPaticipantChoosed = document.querySelector('.participant.choosed');
+
+    if (lastPaticipantChoosed !== null) {
+        lastPaticipantChoosed.classList.remove('choosed')
+    }
+
+    participant.classList.add('choosed');
+
+    messageToSend.to = participant.lastElementChild.innerHTML;
 }
+
+function chooseVisibility(visibilityOption) {
+    const lastVisibilityChoosed = document.querySelector('.visibility-option.choosed');
+
+    if (lastVisibilityChoosed !== null) {
+        lastVisibilityChoosed.classList.remove('choosed')
+    }
+
+    visibilityOption.classList.add('choosed')
+
+    messageToSend.type = visibilityOption.id;
+}
+
+
